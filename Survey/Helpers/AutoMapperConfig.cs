@@ -1,0 +1,17 @@
+﻿using AutoMapper;
+using Survey.Domain.Models;
+using Survey.Models;
+
+namespace Survey.Helpers
+{
+    public static class AutoMapperConfig
+    {
+        public static void InitializeAutoMapper()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<HomeViewModel, RegistrationModel>();
+            });
+        }
+    }
+}
