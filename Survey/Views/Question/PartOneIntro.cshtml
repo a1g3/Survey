@@ -1,4 +1,5 @@
-﻿
+﻿@model UserViewModel
+
 @{
     ViewData["Title"] = "PartOneIntro";
 }
@@ -10,5 +11,5 @@
         Two letters will appear on a screen. Your task is to pick one of the letters. There is no "right" answer for any quesiton.
     </div>
     <br />
-    <a href="@Url.Action("Question", "Question")">Start Part 1</a>
+    <a href="@Url.Action("Question", "Question", new { userId = Model.UserId })">Start Part 1</a>
 </div>

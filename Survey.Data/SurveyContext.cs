@@ -15,7 +15,7 @@ namespace Survey.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=ALGE-DEVDESK;Initial Catalog=Survey;Integrated Security=True");
+                optionsBuilder.UseMySQL("");
             }
         }
     }

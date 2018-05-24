@@ -10,11 +10,11 @@ namespace Survey.Domain.Entities
     {
         [Key]
         [Required]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
-        public DateTime Birthdate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public virtual ICollection<QuestionEntity> Questions { get; set; }
     }

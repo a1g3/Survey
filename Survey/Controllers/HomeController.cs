@@ -21,11 +21,10 @@ namespace Survey.Controllers
         [HttpPost]
         public IActionResult Index(HomeViewModel viewModel)
         {
-            var user = Mapper.Map<RegistrationModel>(viewModel);
-            user.Id = Guid.NewGuid();
-            //RegistrationService.RegisterUser(user);
+            var user = new UserModel(viewModel.FirstName, viewModel.BirthDate);
+            RegistrationService.RegisterUser(user);
 
-            return RedirectToAction("Part", "Question", new { part = 1, userId = user.Id });
+            return RedirectToAction("Part", "Question", new { userId = user.UserId });
         }
 
         public IActionResult Error()

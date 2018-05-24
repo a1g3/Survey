@@ -4,7 +4,7 @@ namespace Survey.Domain.Interfaces.Infastructure
 {
     public interface IUnitOfWork
     {
-        IModificationRepository<UserEntity> UserEntity { get; }
+        IModificationRepository<UserEntity> UserRepository { get; }
         void Commit();
     }
 }

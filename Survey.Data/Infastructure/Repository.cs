@@ -4,7 +4,7 @@ using Survey.Data.Infastructure.Interfaces;
 namespace Survey.Data.Infastructure
 {
     public abstract class Repository<TEntity>
-           where TEntity : class
+       where TEntity : class
     {
         protected SurveyContext DataContext { get; }
         protected DbSet<TEntity> Db => DataContext.Set<TEntity>();

@@ -4,7 +4,6 @@ namespace Survey.Domain.Interfaces.Services
 {
     public interface IQuestionService
     {
-        void InsertQuestion();
-        void AddAnswer(Guid questionId, string answer);
+        void AddAnswer(Guid userId, string answer);
     }
 }

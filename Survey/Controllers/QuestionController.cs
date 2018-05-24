@@ -10,31 +10,28 @@ namespace Survey.Controllers
         public IQuestionService QuestionService { get; set; }
 
         [HttpGet]
-        public IActionResult Part(int part, Guid userId)
+        public IActionResult Part(Guid userId)
         {
-            if(part == 1)
-            {
-                return View("PartOneIntro");
-            }
-            return null;
+            var viewModel = new UserViewModel() { UserId = userId };
+            return View("PartOneIntro", viewModel);
         }
 
         [HttpGet]
-        public IActionResult Question(int part, Guid userId)
+        public IActionResult Question(Guid userId)
         {
             //Add the question to the db
             //Get question count
             //If it is 15 then part 2 intro
             //If it is question #2,5,13,12,9,15 or 7 give them a question with random options
             //Generate a question and return it with the options
-            return View("Question", new QuestionViewModelOut() { Question = "Hi" });
+            return View("Question", new QuestionViewModelOut() { Question = "Choose a letter. There is no right answer." });
         }
 
         [HttpPost]
-        public IActionResult Submit(int part, Guid questionId, QuestionViewModelIn reponse)
+        public IActionResult Submit(Guid userId, QuestionViewModelIn reponse)
         {
             QuestionService.AddAnswer(new Guid(), "");
-            return RedirectToAction("Question", "Question", new { part, questionId });
+            return RedirectToAction("Question", "Question", new { userId });
         }
     }
 }

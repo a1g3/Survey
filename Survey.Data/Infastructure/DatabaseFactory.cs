@@ -6,21 +6,21 @@ namespace Survey.Data.Infastructure
     public class DatabaseFactory : IDatabaseFactory
     {
         private bool IsDisposed { get; set; }
-        private Lazy<SurveyContext> mVulnerabilitiesContext;
+        private Lazy<SurveyContext> mSurveyContext;
 
         public DatabaseFactory()
         {
-            mVulnerabilitiesContext = new Lazy<SurveyContext>();
+            mSurveyContext = new Lazy<SurveyContext>();
         }
 
-        public DatabaseFactory(SurveyContext vulnerabilitiesContext)
+        public DatabaseFactory(SurveyContext surveyContext)
         {
-            mVulnerabilitiesContext = new Lazy<SurveyContext>(vulnerabilitiesContext);
+            mSurveyContext = new Lazy<SurveyContext>(surveyContext);
         }
 
         public SurveyContext GetContext()
         {
-            return mVulnerabilitiesContext.Value;
+            return mSurveyContext.Value;
         }
 
         public void Dispose()
@@ -33,9 +33,9 @@ namespace Survey.Data.Infastructure
         {
             if (IsDisposed)
             {
-                if (disposed && mVulnerabilitiesContext != null && mVulnerabilitiesContext.IsValueCreated)
-                    mVulnerabilitiesContext.Value.Dispose();
-                mVulnerabilitiesContext = null;
+                if (disposed && mSurveyContext != null && mSurveyContext.IsValueCreated)
+                    mSurveyContext.Value.Dispose();
+                mSurveyContext = null;
                 IsDisposed = true;
             }
         }

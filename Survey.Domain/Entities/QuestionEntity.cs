@@ -9,7 +9,7 @@ namespace Survey.Domain.Entities
     {
         [Key]
         [Required]
-        public Guid QuestionId { get; set; }
+        public string QuestionId { get; set; }
 
         [Required]
         public string Question { get; set; }

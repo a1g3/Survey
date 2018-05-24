@@ -13,21 +13,21 @@ namespace Survey.Data.Infastructure
             Context = new SurveyContext();
         }
 
-        private IModificationRepository<UserEntity> cveRepository;
+        private IModificationRepository<UserEntity> userRepository;
 
-        public IModificationRepository<UserEntity> UserEntity
+        public IModificationRepository<UserEntity> UserRepository
         {
             get
             {
-                if (this.cveRepository == null)
-                    cveRepository = new ModificationRepository<UserEntity>(Context);
-                return cveRepository;
+                if (this.userRepository == null)
+                    userRepository = new ModificationRepository<UserEntity>(Context);
+                return userRepository;
             }
         }
 
-        public UnitOfWork(SurveyContext vulnerabilitiesContext)
+        public UnitOfWork(SurveyContext surveyContext)
         {
-            Context = vulnerabilitiesContext;
+            Context = surveyContext;
         }
 
         public void Commit()

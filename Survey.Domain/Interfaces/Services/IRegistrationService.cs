@@ -4,6 +4,6 @@ namespace Survey.Domain.Interfaces.Services
 {
     public interface IRegistrationService
     {
-        void RegisterUser(RegistrationModel registrationModel);
+        void RegisterUser(UserModel registrationModel);
     }
 }

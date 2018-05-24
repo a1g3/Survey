@@ -1,4 +1,5 @@
 ﻿using Survey.Data.Infastructure.Interfaces;
+using Survey.Domain.Interfaces.Infastructure;
 
 namespace Survey.Data.Infastructure
 {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Survey.Controllers;
 using Survey.Helpers;
 
 namespace Survey
@@ -26,6 +27,9 @@ namespace Survey
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly(), Assembly.Load("Survey.Domain"), Assembly.Load("Survey.Data")).AsImplementedInterfaces().PropertiesAutowired();
+
+            //Controllers
+            builder.RegisterType<HomeController>().PropertiesAutowired();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,10 +55,10 @@ namespace Survey
                     template: "{controller=Home}/{action=Index}");
                 routes.MapRoute(
                     name: "question",
-                    template: "Question/{part}/{questionId}");
+                    template: "Question/{userId}");
                 routes.MapRoute(
-                    name: "questionIndex",
-                    template: "Question/Part/{part}");
+                    name: "partIndex",
+                    template: "Question/Part/{userId}");
             });
         }
     }

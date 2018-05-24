@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Survey.Domain.Entities;
 using Survey.Domain.Models;
 using Survey.Models;
 
@@ -10,7 +11,7 @@ namespace Survey.Helpers
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<HomeViewModel, RegistrationModel>();
+                cfg.CreateMap<UserModel, UserEntity>();
             });
         }
     }
