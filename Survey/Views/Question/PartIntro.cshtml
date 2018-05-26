@@ -5,11 +5,11 @@
 }
 
 <div style="border: 1px black solid;text-align: center;padding: 5%;">
-    <h2>Part 1</h2>
+    <h2>Part @Model.Part</h2>
     <div>
         <div style="font-weight: bold;">Instructions</div>
         @Model.Instructions
     </div>
     <br />
-    <a href="@Url.Action("Question", "Question", new { userId = Model.UserId })">Start Part 1</a>
+    <a href="@Url.Action("Question", "Question", new { userId = Model.UserId })">Start Part @Model.Part</a>
 </div>

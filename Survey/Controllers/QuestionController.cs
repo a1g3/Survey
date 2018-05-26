@@ -22,12 +22,12 @@ namespace Survey.Controllers
             if(currentPart == 0)
             {
                 viewModel.Part = 1;
-                viewModel.Instructions = "Two letters will appear on a screen. Your task is to pick one of the letters. There is no \"right\" answer for any quesiton.";
+                viewModel.Instructions = "Two letters will appear on the screen. Your task is to pick one of the letters. There is no \"right\" answer for any quesiton.";
                 UserProgressService.UpdatePartNumber(userId, 1);
             } else if(questionCount >= 15 && currentPart == 1)
             {
                 viewModel.Part = 2;
-                viewModel.Instructions = "PRICEEEEEEEEEEEEEEEEEEEEEEEE";
+                viewModel.Instructions = "Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.";
                 UserProgressService.UpdatePartNumber(userId, 2);
             }
                 return View("PartIntro", viewModel);
