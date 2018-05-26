@@ -3,23 +3,26 @@
     ViewData["Title"] = "Question";
 }
 
+<link href="~/css/question.min.css" rel="stylesheet" />
+
 <div style="width: 100%; border-bottom: 1px grey solid">
     <h2>@Model.Question</h2>
 </div>
 <form asp-controller="Question" asp-action="Submit" method="post">
-    <div style="display: flex; width: 50%; justify-content: space-between; margin-left: 25%; margin-top: 10%;">
-
+    <div id="optionsBox">
         @{
             foreach (var option in Model.Options)
             {
-                <div>
-                    <input type="radio" value="@option" asp-for="Response" id="@option" />
-                    <label>@option</label>
-                </div>
+                <label class="inputContainer">
+                    @option
+                    <input type="radio" name="radio" value="@option" required>
+                    <span class="checkmark"></span>
+                </label>
             }
         }
 
-        <input type="hidden" name="userId" id="userId" value="@Model.userId" />
-        <input type="submit" class="btn btn-primary" name="Next" />
     </div>
+
+    <input type="hidden" name="userId" id="userId" value="@Model.userId" />
+    <input type="submit" class="btn btn-primary" value="Next >" />
 </form>
