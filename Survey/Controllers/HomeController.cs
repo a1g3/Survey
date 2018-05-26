@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using AutoMapper;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Survey.Domain.Interfaces.Services;
 using Survey.Domain.Models;
@@ -21,7 +19,7 @@ namespace Survey.Controllers
         [HttpPost]
         public IActionResult Index(HomeViewModel viewModel)
         {
-            var user = new UserModel(viewModel.FirstName, viewModel.BirthDate);
+            var user = new UserModel(viewModel.FirstName.ToUpper(), viewModel.BirthDate);
             RegistrationService.RegisterUser(user);
 
             return RedirectToAction("Part", "Question", new { userId = user.UserId });

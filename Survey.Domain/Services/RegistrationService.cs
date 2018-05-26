@@ -13,7 +13,7 @@ namespace Survey.Domain.Services
         public void RegisterUser(UserModel registrationModel)
         {
             var user = Mapper.Map<UserEntity>(registrationModel);
-            var userProgress = new UserProgressEntity() { QuestionNumber = 0, User = user, UserId = user.UserId};
+            var userProgress = new UserProgressEntity() { QuestionNumber = 0, User = user, UserId = user.UserId, PartNumber = 0};
             UnitOfWork.UserProgressRepository.Insert(userProgress);
             UnitOfWork.UserRepository.Insert(user);
             UnitOfWork.Commit();

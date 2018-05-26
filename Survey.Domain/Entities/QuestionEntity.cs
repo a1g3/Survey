@@ -10,15 +10,16 @@ namespace Survey.Domain.Entities
         [Key]
         [Required]
         public string QuestionId { get; set; }
-
         [ForeignKey("User")]
         [Required]
         public string UserId { get; set; }
-
+        [Required]
+        public int QuestionType { get; set; }
         [Required]
         public string Question { get; set; }
         [Required]
         public string Options { get; set; }
+
         public string Response { get; set; }
 
         public virtual UserEntity User { get; set; }

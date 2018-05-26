@@ -1,4 +1,4 @@
-﻿@model QuestionViewModelOut
+﻿@model QuestionViewModel
 @{
     ViewData["Title"] = "Question";
 }
@@ -6,13 +6,20 @@
 <div style="width: 100%; border-bottom: 1px grey solid">
     <h2>@Model.Question</h2>
 </div>
+<form asp-controller="Question" asp-action="Submit" method="post">
+    <div style="display: flex; width: 50%; justify-content: space-between; margin-left: 25%; margin-top: 10%;">
 
-<div style="display: flex; padding-top: 20%">
-    <div style="background-color: gainsboro; height: 200px; width: 40%; margin-right: 10%">
-        <h1 style="text-align: center">C</h1>
-    </div>
-    <div style="background-color: gainsboro; height: 200px; width: 40%; margin-left: 10%">
-        <h1 style="text-align: center">C</h1>
-    </div>
-</div>
+        @{
+            foreach (var option in Model.Options)
+            {
+                <div>
+                    <input type="radio" value="@option" asp-for="Response" id="@option" />
+                    <label>@option</label>
+                </div>
+            }
+        }
 
+        <input type="hidden" name="userId" id="userId" value="@Model.userId" />
+        <input type="submit" class="btn btn-primary" name="Next" />
+    </div>
+</form>

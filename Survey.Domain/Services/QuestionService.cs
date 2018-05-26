@@ -12,8 +12,9 @@ namespace Survey.Domain.Services
     public class QuestionService : IQuestionService
     {
         public IQuestionRepository QuestionRepository { get; set; }
-        public IUserProgressRepository UserProgressRepository { get; set; }
         public IUserRepository UserRepository { get; set; }
+        public IUserProgressRepository UserProgressRepository { get; set; }
+        public IUserProgressService UserProgressService { get; set; }
         public ISurveySettings SurveySettings { get; set; }
         public IUnitOfWork UnitOfWork { get; set; }
 
@@ -34,13 +35,14 @@ namespace Survey.Domain.Services
             var question = new QuestionEntity() {
                 Question = questionModel.Question,
                 Options = String.Join(", ", questionModel.Options),
+                QuestionType = (int)questionModel.QuestionType,
                 QuestionId = questionId,
                 UserId = userId
             };
             UnitOfWork.QuestionRepository.Insert(question);
             UnitOfWork.Commit();
 
-            var questionCount = GetAnsweredQuestionCount(userId);
+            var questionCount = UserProgressService.GetAnsweredQuestionCount(userId);
             var userProgress = UserProgressRepository.GetCurrentProgress(userId);
             userProgress.Question = question;
             userProgress.QuestionNumber++;
@@ -49,30 +51,59 @@ namespace Survey.Domain.Services
             UnitOfWork.Commit();
         }
 
-        public int GetAnsweredQuestionCount(string userId)
-        {
-            return UserProgressRepository.GetQuestionCount(userId);
-        }
-
         public QuestionModel GetNextQuestion(string userId)
         {
             var questionCount = UserProgressRepository.GetQuestionCount(userId);
             if (questionCount > 15) return null;
 
+            var currentPart = UserProgressRepository.GetCurrentPartNumber(userId);
             var userInformation = UserRepository.GetUserInformation(userId);
             QuestionModel question;
 
-            if (SurveySettings.ControlQuestions.Contains(questionCount))
-                question = new QuestionModel("What would you pay for a new bike?", GenerateOptions(), Enums.QuestionType.CONTROL);
-            else
-                question = new QuestionModel("What would you pay for a new bike?", GenerateOptions(userInformation.BirthDate), Enums.QuestionType.EXPERIMENTAL);
+            if (currentPart == 1)
+            {
+                if (SurveySettings.ControlQuestions.Contains(questionCount))
+                    question = new QuestionModel("", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.CONTROL), Enums.QuestionType.CONTROL);
+                else
+                    question = new QuestionModel("", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.EXPERIMENTAL), Enums.QuestionType.EXPERIMENTAL);
+            } else
+            {
+                if (SurveySettings.ControlQuestions.Contains(questionCount))
+                    question = new QuestionModel("What would you pay for a new bike?", GenerateOptionsForPartTwo(), Enums.QuestionType.CONTROL);
+                else
+                    question = new QuestionModel("What would you pay for a new bike?", GenerateOptionsForPartTwo(userInformation.BirthDate), Enums.QuestionType.EXPERIMENTAL);
+            }
 
             AddQuestion(userId, question);
 
             return question;
         }
 
-        private List<string> GenerateOptions(DateTime? birthDate = null)
+        private List<string> GenerateOptionsForPartOne(string name, Enums.QuestionType questionType)
+        {
+            Random random = new Random();
+            List<string> options = new List<string>();
+            List<string> alphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+            List<string> nameCharacters = name.ToUpper().ToCharArray().Select(x => x.ToString()).ToList();
+
+            if (questionType == Enums.QuestionType.EXPERIMENTAL)
+            {
+                var index = random.Next(0, name.Length - 1);
+                options.Add(name[index].ToString());
+            } else
+            {
+                var nonNameOptions = alphabet.Except(nameCharacters);
+                var index = random.Next(0, alphabet.Count);
+                options.Add(alphabet[index]);
+            }
+            var notUsedLetters = alphabet.Except(nameCharacters).Except(options).ToList();
+            var randomIndex = random.Next(0, notUsedLetters.Count() - 1);
+            options.Add(notUsedLetters[randomIndex]);
+
+            return options;
+        }
+
+        private List<string> GenerateOptionsForPartTwo(DateTime? birthDate = null)
         {
             Random random = new Random();
             List<double> options = new List<double>();
@@ -86,19 +117,20 @@ namespace Survey.Domain.Services
                 birthDatePrice = birthDatePrice.Insert(2, ".");
                 options.Add(double.Parse(birthDatePrice));
             } else
-                options.Add(Math.Round(random.NextDouble() * 100, 2));
+                options.Add(random.NextDouble() * 100);
             
             for (int x = 0; x != 3; x++)
             {
-                var offset = Math.Round(random.NextDouble(), 2);
+                var offset = random.NextDouble() * 10;
 
                 if (random.NextDouble() >= 0.5)
                     options.Add(options.First() + offset);
                 else
-                    options.Add(options.First() - offset);
+                    //Make sure the value is not negative
+                    options.Add(Math.Abs(options.First() - offset));
             }
 
-            return options.Select(x => x.ToString()).ToList();
+            return options.Select(x => x.ToString("C")).ToList();
         }
     }
 }

@@ -12,6 +12,9 @@ namespace Survey.Domain.Entities
         public string UserId { get; set; }
 
         [Required]
+        public int PartNumber { get; set; }
+
+        [Required]
         public int QuestionNumber { get; set; }
 
         [ForeignKey("QuestionId")]

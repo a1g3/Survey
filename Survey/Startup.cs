@@ -59,12 +59,6 @@ namespace Survey
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}");
-                routes.MapRoute(
-                    name: "question",
-                    template: "Question/{userId}");
-                routes.MapRoute(
-                    name: "partIndex",
-                    template: "Question/Part/{userId}");
             });
         }
     }

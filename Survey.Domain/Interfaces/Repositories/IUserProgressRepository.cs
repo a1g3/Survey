@@ -7,5 +7,6 @@ namespace Survey.Domain.Interfaces.Repositories
         UserProgressEntity GetCurrentProgress(string userId);
         QuestionEntity GetCurrentQuestion(string userId);
         int GetQuestionCount(string userId);
+        int GetCurrentPartNumber(string userId);
     }
 }

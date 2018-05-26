@@ -1,14 +1,14 @@
 ﻿@model UserViewModel
 
 @{
-    ViewData["Title"] = "PartOneIntro";
+    ViewData["Title"] = $"Part {Model.Part} Intro";
 }
 
 <div style="border: 1px black solid;text-align: center;padding: 5%;">
     <h2>Part 1</h2>
     <div>
         <div style="font-weight: bold;">Instructions</div>
-        Two letters will appear on a screen. Your task is to pick one of the letters. There is no "right" answer for any quesiton.
+        @Model.Instructions
     </div>
     <br />
     <a href="@Url.Action("Question", "Question", new { userId = Model.UserId })">Start Part 1</a>

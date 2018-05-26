@@ -11,6 +11,7 @@ namespace Survey.Helpers
         {
             Mapper.Initialize(cfg =>
             {
+                cfg.CreateMap<QuestionModel, QuestionViewModel>();
                 cfg.CreateMap<UserModel, UserEntity>();
             });
         }
