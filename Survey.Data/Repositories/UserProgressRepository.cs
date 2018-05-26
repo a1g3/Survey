@@ -10,6 +10,13 @@ namespace Survey.Data.Repositories
     {
         public UserProgressRepository(IDatabaseFactory factory) : base(factory) { }
 
+        public UserProgressEntity GetCurrentProgress(string userId)
+        {
+            return (from userProgress in this.Db
+                    where userProgress.UserId == userId
+                    select userProgress).Single();
+        }
+
         public QuestionEntity GetCurrentQuestion(string userId)
         {
             return (from userProgress in this.Db

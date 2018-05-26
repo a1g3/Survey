@@ -8,7 +8,7 @@ namespace Survey.Domain.Models
         public string Instructions { get; set; }
         public string Question { get; }
         public List<string> Options { get; }
-        public string Choice { set => Choice = value; }
+        public string Response { set => Response = value; }
         public QuestionType QuestionType { get; }
 
         public QuestionModel(string question, List<string> options, QuestionType questionType)

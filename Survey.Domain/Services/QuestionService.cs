@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Survey.Domain.Entities;
 using Survey.Domain.Interfaces.Infastructure;
 using Survey.Domain.Interfaces.Repositories;
 using Survey.Domain.Interfaces.Services;
@@ -26,6 +27,28 @@ namespace Survey.Domain.Services
             UnitOfWork.Commit();
         }
 
+        public void AddQuestion(string userId, QuestionModel questionModel)
+        {
+            var questionId = Guid.NewGuid().ToString();
+
+            var question = new QuestionEntity() {
+                Question = questionModel.Question,
+                Options = String.Join(", ", questionModel.Options),
+                QuestionId = questionId,
+                UserId = userId
+            };
+            UnitOfWork.QuestionRepository.Insert(question);
+            UnitOfWork.Commit();
+
+            var questionCount = GetAnsweredQuestionCount(userId);
+            var userProgress = UserProgressRepository.GetCurrentProgress(userId);
+            userProgress.Question = question;
+            userProgress.QuestionNumber++;
+
+            UnitOfWork.UserProgressRepository.Update(userProgress);
+            UnitOfWork.Commit();
+        }
+
         public int GetAnsweredQuestionCount(string userId)
         {
             return UserProgressRepository.GetQuestionCount(userId);
@@ -44,7 +67,7 @@ namespace Survey.Domain.Services
             else
                 question = new QuestionModel("What would you pay for a new bike?", GenerateOptions(userInformation.BirthDate), Enums.QuestionType.EXPERIMENTAL);
 
-            //TODO: Add question to Db
+            AddQuestion(userId, question);
 
             return question;
         }
