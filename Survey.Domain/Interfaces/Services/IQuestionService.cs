@@ -1,9 +1,12 @@
 ﻿using System;
+using Survey.Domain.Models;
 
 namespace Survey.Domain.Interfaces.Services
 {
     public interface IQuestionService
     {
-        void AddAnswer(Guid userId, string answer);
+        QuestionModel GetNextQuestion(string userId);
+        int GetAnsweredQuestionCount(string userId);
+        void AddAnswer(string userId, string answer);
     }
 }

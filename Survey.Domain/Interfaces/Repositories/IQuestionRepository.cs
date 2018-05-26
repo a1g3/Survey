@@ -1,7 +1,10 @@
-﻿namespace Survey.Domain.Interfaces.Repositories
+﻿using Survey.Domain.Entities;
+
+namespace Survey.Domain.Interfaces.Repositories
 {
     public interface IQuestionRepository
     {
-        int GetAnsweredQuestionCount(string userId);
+        string GetUnansweredQuestionId(string userId);
+        QuestionEntity GetQuestion(string questionId);
     }
 }

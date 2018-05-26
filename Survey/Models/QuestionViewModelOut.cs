@@ -6,6 +6,5 @@ namespace Survey.Models
     {
         public string Question { get; set; }
         public List<string> Options { get; set; }
-        public int Part { get; set; }
     }
 }

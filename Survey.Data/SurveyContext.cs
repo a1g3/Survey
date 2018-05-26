@@ -7,6 +7,7 @@ namespace Survey.Data
     {
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<QuestionEntity> Questions { get; set; }
+        public DbSet<UserProgressEntity> UserProgress { get; set; }
 
         public SurveyContext() { }
         public SurveyContext(DbContextOptions<SurveyContext> options) : base(options) { }

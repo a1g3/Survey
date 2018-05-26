@@ -25,6 +25,30 @@ namespace Survey.Data.Infastructure
             }
         }
 
+        private IModificationRepository<UserProgressEntity> userProgressRepository;
+
+        public IModificationRepository<UserProgressEntity> UserProgressRepository
+        {
+            get
+            {
+                if (this.userProgressRepository == null)
+                    userProgressRepository = new ModificationRepository<UserProgressEntity>(Context);
+                return userProgressRepository;
+            }
+        }
+
+        private IModificationRepository<QuestionEntity> questionRepository;
+
+        public IModificationRepository<QuestionEntity> QuestionRepository
+        {
+            get
+            {
+                if (this.questionRepository == null)
+                    questionRepository = new ModificationRepository<QuestionEntity>(Context);
+                return questionRepository;
+            }
+        }
+
         public UnitOfWork(SurveyContext surveyContext)
         {
             Context = surveyContext;

@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Survey.Controllers;
+using Survey.Domain.Infastructure;
+using Survey.Domain.Interfaces.Infastructure;
 using Survey.Helpers;
 
 namespace Survey
@@ -27,9 +31,11 @@ namespace Survey
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly(), Assembly.Load("Survey.Domain"), Assembly.Load("Survey.Data")).AsImplementedInterfaces().PropertiesAutowired();
+            builder.RegisterInstance(new SurveySettings(Configuration.GetSection("ControlQuestions").Get<List<int>>())).As<ISurveySettings>().SingleInstance();
 
             //Controllers
             builder.RegisterType<HomeController>().PropertiesAutowired();
+            builder.RegisterType<QuestionController>().PropertiesAutowired();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

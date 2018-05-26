@@ -5,6 +5,7 @@ namespace Survey.Domain.Models
 {
     public class QuestionModel
     {
+        public string Instructions { get; set; }
         public string Question { get; }
         public List<string> Options { get; }
         public string Choice { set => Choice = value; }
