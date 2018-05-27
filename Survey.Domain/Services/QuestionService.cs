@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Survey.Domain.Entities;
 using Survey.Domain.Interfaces.Infastructure;
 using Survey.Domain.Interfaces.Repositories;
 using Survey.Domain.Interfaces.Services;
 using Survey.Domain.Models;
+using Survey.Domain.Utils;
 
 namespace Survey.Domain.Services
 {
@@ -26,6 +28,14 @@ namespace Survey.Domain.Services
             question.Response = answer;
             UnitOfWork.QuestionRepository.Update(question);
             UnitOfWork.Commit();
+        }
+
+        public QuestionModel GetCurrentQuestion(string userId)
+        {
+            var currentQuestion = UserProgressRepository.GetCurrentQuestion(userId);
+            if (currentQuestion == null) return null;
+            var question = QuestionRepository.GetQuestion(currentQuestion.QuestionId);
+            return Mapper.Map<QuestionModel>(question);
         }
 
         public void AddQuestion(string userId, QuestionModel questionModel)
@@ -100,7 +110,7 @@ namespace Survey.Domain.Services
             var randomIndex = random.Next(0, notUsedLetters.Count() - 1);
             options.Add(notUsedLetters[randomIndex]);
 
-            return options;
+            return options.Shuffle();
         }
 
         private List<string> GenerateOptionsForPartTwo(DateTime? birthDate = null)
@@ -130,7 +140,7 @@ namespace Survey.Domain.Services
                     options.Add(Math.Abs(options.First() - offset));
             }
 
-            return options.Select(x => x.ToString("C")).ToList();
+            return options.Select(x => x.ToString("C")).ToList().Shuffle();
         }
     }
 }

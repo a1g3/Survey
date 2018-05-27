@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Survey.Domain.Interfaces.Infastructure;
 using Survey.Domain.Interfaces.Services;
@@ -39,23 +40,29 @@ namespace Survey.Controllers
         [HttpGet]
         public IActionResult Question(string userId)
         {
-            var nextQuesiton = QuestionService.GetNextQuestion(userId);
-            if(nextQuesiton != null)
+            var currentQuestion = QuestionService.GetCurrentQuestion(userId);
+            QuestionViewModel question;
+            if (currentQuestion != null && String.IsNullOrEmpty(currentQuestion.Response))
+                question = Mapper.Map<QuestionViewModel>(currentQuestion);
+            else
             {
-                var question = Mapper.Map<QuestionViewModel>(nextQuesiton);
+                var nextQuesiton = QuestionService.GetNextQuestion(userId);
+                question = Mapper.Map<QuestionViewModel>(nextQuesiton);
+            }
+            
+            if(question != null)
+            {
                 question.userId = userId;
 
                 return View("Question", question);
             } else
-            {
                 return RedirectToAction("Part", new { userId });
-            }
         }
 
         [HttpPost]
-        public IActionResult Submit(string userId, string Response)
+        public IActionResult Submit(string userId, string response)
         {
-            QuestionService.AddAnswer(userId, Response);
+            QuestionService.AddAnswer(userId, response);
             return RedirectToAction("Question", new { userId });
         }
     }
