@@ -73,15 +73,15 @@ namespace Survey.Domain.Services
             if (currentPart == 1)
             {
                 if (SurveySettings.ControlQuestions.Contains(questionCount))
-                    question = new QuestionModel("Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.CONTROL), Enums.QuestionType.CONTROL);
+                    question = new QuestionModel("Two letters will appear on the screen. Your task is to pick one of the letters. There is no correct answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.CONTROL), Enums.QuestionType.CONTROL);
                 else
-                    question = new QuestionModel("Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.EXPERIMENTAL), Enums.QuestionType.EXPERIMENTAL);
+                    question = new QuestionModel("Two letters will appear on the screen. Your task is to pick one of the letters. There is no correct answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.EXPERIMENTAL), Enums.QuestionType.EXPERIMENTAL);
             } else
             {
                 if (SurveySettings.ControlQuestions.Contains(questionCount))
-                    question = new QuestionModel("What would you pay for a new bike?", GenerateOptionsForPartTwo(), Enums.QuestionType.CONTROL);
+                    question = new QuestionModel("Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.", GenerateOptionsForPartTwo(), Enums.QuestionType.CONTROL);
                 else
-                    question = new QuestionModel("What would you pay for a new bike?", GenerateOptionsForPartTwo(userInformation.BirthDate), Enums.QuestionType.EXPERIMENTAL);
+                    question = new QuestionModel("Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.", GenerateOptionsForPartTwo(userInformation.BirthDate), Enums.QuestionType.EXPERIMENTAL);
             }
 
             AddQuestion(userId, question);
