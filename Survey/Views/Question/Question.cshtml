@@ -5,17 +5,17 @@
 
 <link href="~/css/question.min.css" rel="stylesheet" />
 
-<div style="width: 100%; border-bottom: 1px grey solid">
+<div id="instructions">
     <h6>@Model.Question</h6>
 </div>
 <form asp-controller="Question" asp-action="Submit" method="post">
-    <div id="optionsBox">
+    <div @(Model.Options.Count <= 2 ? "id=optionsBox" : "id=bigOptionsBox")>
         @{
             foreach (var option in Model.Options)
             {
                 <label class="inputContainer">
                     @option
-                    <input type="radio" name="response" id="response" value="@option" required />
+                    <input type="radio" name="response" value="@option" required />
                     <span class="checkmark"></span>
                 </label>
             }

@@ -23,14 +23,14 @@ namespace Survey.Controllers
             if(currentPart == 0)
             {
                 viewModel.Part = 1;
-                viewModel.Instructions = "Two letters will appear on the screen. Your task is to pick one of the letters. There is no correct answer for any quesiton.";
+                viewModel.Instructions = "Two letters will appear on the screen. Your task is to examine the options and then pick one of the letters. There is no correct answer for any quesiton.";
                 UserProgressService.UpdatePartNumber(userId, 1);
-            } else if(questionCount >= 15 && currentPart == 1)
+            } else if(questionCount >= 9 && currentPart == 1)
             {
                 viewModel.Part = 2;
-                viewModel.Instructions = "Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.";
+                viewModel.Instructions = "A scenario will be shown on a screen along with a price. Your task is to examine the price and decide how likely you are to spend money in that scenario. There is no correct answer for any quesiton.";
                 UserProgressService.UpdatePartNumber(userId, 2);
-            } else if(questionCount >= 15 && currentPart == 2)
+            } else if(questionCount >= 2 && currentPart == 2)
             {
                 return View("SurveyComplete");
             }

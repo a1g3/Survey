@@ -53,6 +53,15 @@
   margin-left: 30%;
   margin-top: 10%; }
 
+#bigOptionsBox {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10%; }
+
 input[type=submit] {
   float: right; }
+
+#instructions {
+  width: 100%;
+  border-bottom: 1px grey solid; }
 

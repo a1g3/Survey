@@ -64,24 +64,23 @@ namespace Survey.Domain.Services
         public QuestionModel GetNextQuestion(string userId)
         {
             var questionCount = UserProgressRepository.GetQuestionCount(userId);
-            if (questionCount > 15) return null;
-
             var currentPart = UserProgressRepository.GetCurrentPartNumber(userId);
+
+            if (currentPart == 1 && questionCount > 9) return null;
+            if (currentPart == 2 && questionCount > 2) return null;
+
             var userInformation = UserRepository.GetUserInformation(userId);
             QuestionModel question;
 
             if (currentPart == 1)
             {
                 if (SurveySettings.ControlQuestions.Contains(questionCount))
-                    question = new QuestionModel("Two letters will appear on the screen. Your task is to pick one of the letters. There is no correct answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.CONTROL), Enums.QuestionType.CONTROL);
+                    question = new QuestionModel("Two letters will appear on the screen. Your task is to examine the options and then pick one of the letters. There is no correct answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.CONTROL), Enums.QuestionType.CONTROL);
                 else
-                    question = new QuestionModel("Two letters will appear on the screen. Your task is to pick one of the letters. There is no correct answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.EXPERIMENTAL), Enums.QuestionType.EXPERIMENTAL);
+                    question = new QuestionModel("Two letters will appear on the screen. Your task is to examine the options and then pick one of the letters. There is no correct answer for any quesiton.", GenerateOptionsForPartOne(userInformation.Name, Enums.QuestionType.EXPERIMENTAL), Enums.QuestionType.EXPERIMENTAL);
             } else
             {
-                if (SurveySettings.ControlQuestions.Contains(questionCount))
-                    question = new QuestionModel("Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.", GenerateOptionsForPartTwo(), Enums.QuestionType.CONTROL);
-                else
-                    question = new QuestionModel("Four prices will appear on the screen. Your task is to pick a price that would most likely catch your eye at a store. There is no \"right\" answer for any quesiton.", GenerateOptionsForPartTwo(userInformation.BirthDate), Enums.QuestionType.EXPERIMENTAL);
+                question = GenerateOptionsForPartTwo(questionCount, userInformation.BirthDate);
             }
 
             AddQuestion(userId, question);
@@ -113,34 +112,50 @@ namespace Survey.Domain.Services
             return options.Shuffle();
         }
 
-        private List<string> GenerateOptionsForPartTwo(DateTime? birthDate = null)
+        private QuestionModel GenerateOptionsForPartTwo(int questionCount, DateTime birthDate)
         {
             Random random = new Random();
             List<double> options = new List<double>();
-            if (birthDate.HasValue)
-            {
-                string birthDateString = birthDate.Value.Month.ToString() + birthDate.Value.Day.ToString() + birthDate.Value.Year.ToString();
-                string birthDatePrice = "";
+            var group = random.NextDouble() >= 0.5; //true means experimental
+            string question = "";
+            double date = 0.0;
+            string price = "";
 
-                for (var x = 0; x != 4; x++)
-                    birthDatePrice += birthDateString[random.Next(0, birthDateString.Length - 1)].ToString();
-                birthDatePrice = birthDatePrice.Insert(2, ".");
-                options.Add(double.Parse(birthDatePrice));
-            } else
-                options.Add(random.NextDouble() * 100);
-            
-            for (int x = 0; x != 3; x++)
+            switch (questionCount)
             {
-                var offset = random.NextDouble() * 10;
-
-                if (random.NextDouble() >= 0.5)
-                    options.Add(options.First() + offset);
-                else
-                    //Make sure the value is not negative
-                    options.Add(Math.Abs(options.First() - offset));
+                case 0:
+                    price = "34";
+                    date = birthDate.Month;
+                    question = "You and your friends are trying to decide if you want to go to dinner.  The dinner will cost {0} including a 15% gratuity and taxes. How likely would you go to this dinner?";
+                    break;
+                case 1:
+                    price = "37";
+                    date = birthDate.Day;
+                    question = "You are trying to decide if you should order a new item online. After taxes and shipping, the item will cost {0}. How likely are you to buy this item?";
+                    break;
+                case 2:
+                    price = "41";
+                    date = int.Parse(birthDate.Year.ToString().Substring(1, 2));
+                    question = "You are trying to decide if you want to bid on a item on TV. After taxes, the item will cost {0}. How likely are you to buy this item?";
+                    break;
+                default:
+                    question = "ERROR!";
+                    break;
             }
+            date = date * 0.01;
+            if (!group)
+                if (date <= 0.05)
+                    date += 0.05;
+                else if (date >= 0.95)
+                    date -= 0.05;
+                else
+                    if (random.NextDouble() >= 0.5)
+                        date += 0.05;
+                    else
+                        date -= 0.05;
+            double finalPrice = double.Parse(price) + date;
 
-            return options.Select(x => x.ToString("C")).ToList().Shuffle();
+            return new QuestionModel(String.Format(question, finalPrice.ToString("C")), new[] { "1[Definitely Not]", "2[Probably Not]", "3[Maybe]", "4[Probably]", "5[Definitely]" }.ToList(), group ? Enums.QuestionType.EXPERIMENTAL : Enums.QuestionType.CONTROL);
         }
     }
 }
